@@ -1,6 +1,6 @@
 # NodeJsChat
 
-A simple Node JS Chat with channels
+A simple Node JS multi user chat with channels
 
 #Usage :
 
