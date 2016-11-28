@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Virtual desktop</title>
+</head>
+<body>
+	<div id="waiter">
+		<img src="/images/loading.gif"/>
+		<div class="meter">
+			<span></span>
+			<h3 style="color:white">Chargement en cours : <text>0%</text></h3>
+		</div>
+	</div>
+	<div id="bg" ></div>
+	<div id="content">
+		<div id="divContent" class="divContent" style="display:none">
+			<div class="divFrame" >
+				<nav id="navbarFrame" class="navbar navbar-inverse">
+					<a target="blank" data="#" class="title dropdown-toggle navbar-brand">
+					</a><a onclick="$(this).parent().parent().parent().remove()" style="float:right" class="dropdown-toggle navbar-brand">Fermer :
+					<span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+
+	<div id="wrapper">
+
+		<!-- Sidebar -->
+		<div id="sidebar-wrapper">
+			<ul class="sidebar-nav">
+				<li class="sidebar-brand">
+					<a>
+						Chat rooms
+					</a>
+				</li>
+				<li >
+					<a>
+						Send messages as :
+					</a>
+				</li>
+				<li class="sidebar-brand">
+					<div class="container-fluid">
+						<input type="text" id="nameInput" class="form-control" value="Anonymous"/>
+					</div>
+				</li>
+
+				<li>
+					<a class="appicon chatRoomLink"  data="xtremsnakes"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Xtreme Snakes</a>
+				</li>
+				<li>
+					<a class="appicon chatRoomLink"  data="schoolofwalks"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> School Of Walk</a>
+				</li>
+				<li>
+					<a class="appicon chatRoomLink"  data="americancomandosquad"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> American Commando Squad</a>
+				</li>
+				<li>
+					<a class="appicon chatRoomLink"  data="nodejspro"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Node JS Pro</a>
+				</li>
+				<li>
+					<a class="appicon chatRoomLink"  data="thekinderpenguins"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> The kinder penguins</a>
+				</li>
+				<li>
+					<a class="appicon chatRoomLink"  data="screensleepers"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Screen sleepers</a>
+				</li>
+				<li>
+					<a class="appicon chatRoomLink" data="audiomaniacs"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Audio Maniacs</a>
+				</li>
+			</ul>
+		</div>
+		<nav class="navbar navbar-inverse navbar-fixed-bottom" id="navbarBot">
+		<!--<ul class="nav navbar-nav navbar-right social">
+			<li>
+				<a class="navbar-brand appicon chatRoomLink" id="linkExplorer">Explorer les données<span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span></a>
+			</li>
+		</ul>-->
+	</nav>
+	<link rel="stylesheet" type="text/css" href="/styles/Css.css">
+	<link rel="stylesheet" href="/styles/jquery-ui.css">
+	<script src="/scripts/jquery-1.10.2.js"></script>
+	<script src="/scripts/jquery-ui.js"></script>
+	<script src="/scripts/jquery.ui.touch-punch.min.js"></script>
+	<link rel="stylesheet" href="/styles/bootstrap.min.css">
+	<link rel="stylesheet" href="/styles/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="/styles/simple_sidebar.css">
+	<script src="/scripts/bootstrap.min.js"></script>
+	<script src="/scripts/masonry.pkgd.js"></script>
+	<script type="text/javascript" src="/scripts/JS.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVh1mJ-DvhZOZUsb40ehjooUTUaCa3_M"></script>
+</body>
+</html>

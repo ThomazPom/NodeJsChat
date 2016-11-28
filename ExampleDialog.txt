@@ -1,0 +1,58 @@
+
+var data = [ {idChat:"audiomaniacs",sender:"Paisley",message:" I'm sick of this. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" What? "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" We never go anywhere or do anything. All we do is sit on this couch and watch TV. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" If you have a better idea I'd love to hear it. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" We could go dancing. We never go dancing. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" The last time we went dancing you got mad because that chic wanted to sit on my lap. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" You smiled at her. You smile at all the girls. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" I thought you liked my sunny nature. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" I only like it when it's shining on me! "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Don't be jealous, sweetheart. I wouldn't be here if I didn't love you. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" You hate my hair. You think I'm ugly. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Come on, don't make me say things I don't mean. You know I miss your long hair. But I'll take you any way you come. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" I'm a woman, you dork. I need compliments. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Uh, I love your eyes. They remind me of a swimming pool, cloudy with chlorine. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" Hmm. I wonder if Jacob is home tonight. He'd love to take me dancing. And he thinks my hair is sexy. And he tells me my eyes remind him of a blue sky on Easter. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" A blue sky on Easter, huh? You go on and call Poet Boy. I'll call Ginger. Ginger has long, perfect hair and she loves to watch TV. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" That's it! Curtains. Mini blinds. We are so through! "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Fine. Before you go, you owe me five bucks. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" What are you talking about? "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" That stupid Pajama Slave Dancers CD you just had to have. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" You can keep it. Use it for mood music to wow Ginger with. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" No, thanks. Ginger prefers Otis Redding. She actually has good taste in music. And clothes, I might add. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" So now you're criticizing the way I dress? You jerk! This outfit used to turn you on! "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" I don't know what I was thinking. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" Fine. Don't you dare call me when Ginger dumps you for some volleyball playin' beach god. When I walk out that door, that's it, buddy. This is your last chance. Do you love me or not? "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" I love you but I can't live with you. You can still call me and e-mail me. But you're no good as a girlfriend. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" Well, you suck as a boyfriend. If we had been on the Titanic together, I woulda said,'See ya, wouldn't want to be ya!' and laughed while you froze your ass off in the water. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Now I'm starting to realize why my friends warned me about you. You're a head case. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" Your friends are all in jail for speeding tickets they couldn't pay. I don't care what they think. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" We don't all have a rich daddy to bail us out. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" You leave my father out of this! "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" I always hated the guy. He has to buy your mom jewelry and take her to Europe once a year to keep her happy. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" I was lucky if you gave me cologne for Christmas. You waste all your money on beer and games for your Play Station. That should really turn Ginger on. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Ginger is a happy-go-lucky kinda gal. Doesn't take much to make that girl happy. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" That's one way of putting it. You'll miss me after spending ten minutes with her. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" We'll see. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" Your arrogance is astounding. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" There's a reason for it. I rock. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" Ha! How can you say that with a straight face?!! Who do you think you are, the lead singer of Sugar Ray? "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Please. That guy has nothing on me. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" Jacob tells me I remind him of Gwen Stefani. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Hmm. I don't guess he's ever actually heard you sing. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" I CAN sing! "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Whatever. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" OH, that's it! That's the last straw! Goodbye, Sinbad. "} ,
+ {idChat:"audiomaniacs",sender:"Sinbad",message:" Goodbye, Paisley. Be careful. There are a lot of guys out there who will take advantage of a broken woman. "} ,
+ {idChat:"audiomaniacs",sender:"Paisley",message:" Ha! I'm not broken, baby. I'm BROKEN IN." } ]
+$(data).each(function(){
+	$.ajax({
+                		url: "/postmessage",
+                		data:this
+                	})
+                	.done(function( data ) {
+
+            });
+
+});
