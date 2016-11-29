@@ -21,6 +21,8 @@ var meter = divWaiter.children(".meter").children("span");
 var percentMeter = divWaiter.children(".meter").children("h3").children("text");
 divWaiter.draggable();
 
+var socket = io();
+
 
 //-/Initialisation terminée
 
@@ -39,7 +41,7 @@ $(document).on('keyup',function(evt) {
 	}
 });
 //Pour  créeer des fenêtres les styliser et les initialiser
-$(".appicon").click(function()
+newDataFrame = function(type=null,data=null)
 {
 	var decalage = 60+(idDivContent*10)%100;
 	var divContent = $( "#divContent" ).clone().appendTo( "#content" ).attr("id","divContent" +idDivContent).css("display","block").css("position","absolute")
@@ -49,18 +51,53 @@ $(".appicon").click(function()
 	divContentTopIndex(divContent[0]);
 	divContent.find(".divFrame>nav .title.navbar-brand.dropdown-toggle").html($(this).html());
 	var tailleAdapter = idDivContent%10;
-	if ($(this).hasClass("chatRoomLink")) 
+	if (type=="chatRoomLink"||$(this).hasClass("chatRoomLink")) 
 	{
 		divContent.css("width",40-tailleAdapter/2+"vw").css("height",80-tailleAdapter+"vh");
 		divFrame = divContent.find(".divFrame")
-		
-		initchatRoomLink(divFrame,$(this).attr("data"));
+		initchatRoomLink(divFrame,data||$(this).attr("data"));
 	}
 	
 	idDivContent++;
+}
+
+$(document).on("click",".appicon",newDataFrame);
+
+
+socket.on("roomspdate",function(rooms){
+$(".sidebar-nav li.dynamic").remove();
+	$(rooms).each(function(){
+		$(".sidebar-nav").append($("<li>",{class:"dynamic"}).append(
+			$("<a>",{
+					//	<a class="appicon chatRoomLink" data="audiomaniacs"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Audio Maniacs</a>
+					class:"appicon chatRoomLink",
+					html:" "+this
+
+				}).attr("data",this).prepend($("<span>",{
+					style:"color:cyan",
+					class:"glyphicon glyphicon-comment",
+				})))
+		)
+	});
+
 });
+
+
+$("#newChannelButton").click(function(){
+	name = $("#newChannelInput").val();
+	if(name.length>0)
+	{
+		newDataFrame("chatRoomLink",name);
+	}
+});
+
+
+
+
 function initchatRoomLink(divFrame, idChat)
 {
+	socket.emit("connectchat",{idChat:idChat,sender:$("#nameInput").val()});
+
 	divFrame.append($("<div></div>",{class:"chatWindow"}));
 	divFrame.append($('<input>', {
 		value: idChat,
@@ -78,20 +115,28 @@ function initchatRoomLink(divFrame, idChat)
 		placeholder:"Type a message...",
 		class:"sendChat"
 	}).on('keyup',keypresstextarea));
-	refreshchatRoomLink(divFrame);
 
 	chatWindow=divFrame.find(".chatWindow");
 
+	socket.on(idChat,function(message)
+	{
+		$(message).each(function(){
+			refresChatRoom(this,chatWindow);
+		});
+	});
 	chatWindow.animate({ scrollTop: 9999999999999}, 1000);
 
 }
-setInterval(function(){ 
-	$(".divFrame").each(function()
-	{
-		refreshchatRoomLink($(this));
-	});
 
-}, 500);
+function refresChatRoom(message,chatWindow)
+{
+	console.log(message);
+	chatWindow.append($("<div/>",{
+		html:'<label><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> '+message.sender+': </label> '+message.message.replace("\n","<br>"),
+		class:"alert",
+		style:"background-color:#"+intToRGB(hashCode(message.sender))
+	}));
+}
 var keypresstextarea =    function(e){
 	if (e.keyCode == 13) {
                 // code for first textarea;
@@ -100,28 +145,16 @@ var keypresstextarea =    function(e){
                 var textarea = $(this);
                 chatWindow=divFrame.find(".chatWindow");
 
-                chatWindow2=divFrame.find(".chatWindow")
+                chatWindow2=divFrame.find(".chatWindow");
 
-                //localhost:8000/postmessage?idChat=testqueue&message=Hello&sender=Thomas
+
                 if (textarea.val().trim().length>0) {
-                	$.ajax({
-                		url: "/postmessage",
-                		data:{
-                			idChat:idChat,
-                			message:textarea.val(),
-                			sender:$("#nameInput").val(),
-                			method:"POST"
 
-
-                		}
-                	})
-                	.done(function( data ) {
-                		textarea.val("");
-                		refreshchatRoomLink(divFrame,-1);
-                //	dataobject = $.parseJSON(data);
-
-            });
-
+                	socket.emit('postmessage', {
+                		idChat:idChat,
+                		sender:$("#nameInput").val(),
+                		message:textarea.val()});
+                	textarea.val("");
 
                 }
 
@@ -130,37 +163,6 @@ var keypresstextarea =    function(e){
             }
         };
 
-        function refreshchatRoomLink(divFrame,msgid)
-        {
-        	var chatWindow=divFrame.find(".chatWindow")
-        	var idChat=divFrame.find(".idChat").val();
-        	var inputIdMessage=divFrame.find(".idMessage");
-
-        	$.ajax({
-        		url: "/getmessage",
-        		data:{
-        			idChat:idChat,
-        			idMessage:msgid?msgid:inputIdMessage.val()
-
-
-        		}
-        	})
-        	.done(function( data ) {
-        		dataobject = $.parseJSON(data);
-        		$(dataobject).each(function()
-        		{
-        			chatWindow.append($("<div/>",{
-        				html:'<label><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> '+this.s+': </label> '+this.m.replace("\n","<br>"),
-        				class:"alert",
-        				style:"background-color:#"+intToRGB(hashCode(this.s))
-        			}));
-        			console.log(this.s);
-        			
-        		})
-
-        		inputIdMessage.val(parseInt( inputIdMessage.val())+dataobject.length);
-        	});
-        }
 
 function hashCode(str="Anonymous") { // java String#hashCode
 	var hash = 0;

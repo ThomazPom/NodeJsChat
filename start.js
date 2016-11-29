@@ -24,25 +24,55 @@ app.get('/', function(req, res) {
 	res.render("index.ejs");
 });
 
+var io      = require('socket.io').listen(httpServer);
+
+io.on('connection', function(socket){
+	console.log('a user connected');
+	socket.emit("roomspdate",Object.keys(messages));
+	
+	socket.on('disconnect', function(){
+		console.log('user disconnected');
+	});
+	socket.on("postmessage",postmessage);
+	socket.on('connectchat',function(info)
+	{
+
+		console.log(info.sender+" opened " +info.idChat);
+		socket.join(info.idChat);
+		if(!messages[info.idChat])
+		{
+			messages[info.idChat] = {
+				mqueue:[],
+				name:info.idChat
+			}
+
+			socket.emit("roomspdate",Object.keys(messages));
+		}
+		socket.emit(info.idChat,messages[info.idChat].mqueue);
+	});
+
+
+});
+
+
 messages = {
-	testqueue:{
-		mqueue:[{s:"Thomas",m:"Hello Clement"}, {s:"Clement",m:"Hello Thomas"}, {s:"Clement",m:"Ca va ?"}, {s:"Thomas",m:"Nickel"}]
+	"Xtrem Snakes":{
+		name:"Xtrem Snakes",
+		mqueue:[{sender:"Thomas",message:"Hello Clement"}, {sender:"Clement",message:"Hello Thomas"}, {sender:"Clement",message:"Ca va ?"}, {sender:"Thomas",message:"Nickel"}]
 	}
 	
 }
-app.get('/postmessage', function(req, res) {
-	if(!messages[req.query.idChat])
-	{
-		messages[req.query.idChat] = {
-			mqueue:[]
-		}
-	}
 
-	messages[req.query.idChat].mqueue.push({s:req.query.sender,m:req.query.message});
-	//res.send(JSON.stringify(messages[req.query.idChat]));	
 
-	res.send(JSON.stringify([]));
-});
+
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: false }))
+
+postmessage = function(message){
+	console.log(message.sender+" sent "+message.message+" in "+message.idChat);
+	messages[message.idChat].mqueue.push({sender:message.sender||"Anonymous",message:message.message||"Hello everybody !"});
+	io.to(message.idChat).emit(message.idChat,[message]);
+}
 
 
 app.get('/getmessage', function(req, res) {
@@ -54,8 +84,8 @@ app.get('/getmessage', function(req, res) {
 	}
 	res.send(JSON.stringify([]));
 	
-})
-;
+});
+
 
 function checkPortAndLaunch(checkPort,adresse,typeServeur,serveur, callback)
 {
@@ -76,6 +106,7 @@ function checkPortAndLaunch(checkPort,adresse,typeServeur,serveur, callback)
 			console.log("Serveur "+typeServeur+" asigné au port " +checkPort);
 			if(callback) callback();
 		}
+
 	})
 }
 var phttp=8080;

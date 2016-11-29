@@ -5,6 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 	<title>Virtual desktop</title>
 </head>
 <body>
@@ -50,26 +51,20 @@
 					</div>
 				</li>
 
-				<li>
-					<a class="appicon chatRoomLink"  data="xtremsnakes"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Xtreme Snakes</a>
+					<li>
+					<a>Ajouter une nouvelle chat room :</a>
 				</li>
-				<li>
-					<a class="appicon chatRoomLink"  data="schoolofwalks"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> School Of Walk</a>
-				</li>
-				<li>
-					<a class="appicon chatRoomLink"  data="americancomandosquad"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> American Commando Squad</a>
-				</li>
-				<li>
-					<a class="appicon chatRoomLink"  data="nodejspro"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Node JS Pro</a>
-				</li>
-				<li>
-					<a class="appicon chatRoomLink"  data="thekinderpenguins"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> The kinder penguins</a>
-				</li>
-				<li>
-					<a class="appicon chatRoomLink"  data="screensleepers"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Screen sleepers</a>
-				</li>
-				<li>
-					<a class="appicon chatRoomLink" data="audiomaniacs"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Audio Maniacs</a>
+				<li class="sidebar-brand">
+					<div class="container-fluid">
+					<div class="row">
+					<div class="col col-sm-9">
+						<input type="text" id="newChannelInput" class="form-control" value=""/></div>
+					
+					<div class="col col-sm-1">
+						<button class="btn btn-primary" id="newChannelButton" style="display: block;"><span class="glyphicon glyphicon-plus"> </span></button>
+						</div>
+						</div>
+					</div>
 				</li>
 			</ul>
 		</div>
@@ -91,6 +86,5 @@
 	<script src="/scripts/bootstrap.min.js"></script>
 	<script src="/scripts/masonry.pkgd.js"></script>
 	<script type="text/javascript" src="/scripts/JS.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVh1mJ-DvhZOZUsb40ehjooUTUaCa3_M"></script>
 </body>
 </html>
