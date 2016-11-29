@@ -29,7 +29,7 @@ var io      = require('socket.io').listen(httpServer);
 io.on('connection', function(socket){
 	console.log('a user connected');
 	socket.emit("roomspdate",Object.keys(messages));
-	
+
 	socket.on('disconnect', function(){
 		console.log('user disconnected');
 	});
@@ -74,17 +74,6 @@ postmessage = function(message){
 	io.to(message.idChat).emit(message.idChat,[message]);
 }
 
-
-app.get('/getmessage', function(req, res) {
-	var idmessage = req.query.idMessage
-	if(messages[req.query.idChat])
-	{
-		res.send(JSON.stringify(messages[req.query.idChat].mqueue.slice(idmessage)));
-		return;
-	}
-	res.send(JSON.stringify([]));
-	
-});
 
 
 function checkPortAndLaunch(checkPort,adresse,typeServeur,serveur, callback)
