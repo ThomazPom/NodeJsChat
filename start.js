@@ -46,7 +46,7 @@ io.on('connection', function(socket){
 				name:info.idChat
 			}
 
-			socket.emit("roomspdate",Object.keys(messages));
+			io.sockets.emit("roomspdate",Object.keys(messages));
 		}
 		socket.emit(info.idChat,messages[info.idChat].mqueue);
 	});

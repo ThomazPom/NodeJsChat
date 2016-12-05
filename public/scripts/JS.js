@@ -30,6 +30,7 @@ var socket = io();
 
 function divContentTopIndex(sender)
 {
+	
 	topDivContent=sender;
 	$( ".divContent" ).css("z-index",500);
 	sender.style.zIndex=600;
@@ -43,8 +44,16 @@ $(document).on('keyup',function(evt) {
 //Pour  créeer des fenêtres les styliser et les initialiser
 newDataFrame = function(type=null,data=null)
 {
+	var divContent =$(".divContent[data='"+(data||$(this).attr("data"))+"']");
+	
+	if(divContent.length>0)
+	{
+		divContentTopIndex(divContent[0]);
+		return;
+	}
+	
 	var decalage = 60+(idDivContent*10)%100;
-	var divContent = $( "#divContent" ).clone().appendTo( "#content" ).attr("id","divContent" +idDivContent).css("display","block").css("position","absolute")
+	var divContent = $( "#divContent" ).clone().appendTo( "#content" ).attr("id","divContent" +idDivContent).attr("data",data||$(this).attr("data")).css("display","block").css("position","absolute")
 	.css("top",decalage+"px").css("left",200+decalage+"px").draggable({
 		handle:".divFrame>nav"
 	}).resizable().mousedown(function(){divContentTopIndex(this)});
@@ -56,16 +65,23 @@ newDataFrame = function(type=null,data=null)
 		divContent.css("width",40-tailleAdapter/2+"vw").css("height",80-tailleAdapter+"vh");
 		divFrame = divContent.find(".divFrame")
 		initchatRoomLink(divFrame,data||$(this).attr("data"));
-	}
-	
+	}	
+
 	idDivContent++;
 }
+
+$(document).on("click",".closeDivContent",function()
+{
+	var divContent = $(this).closest('.divContent');
+	socket.removeListener(divContent.find(".idChat").val());
+	divContent.remove();
+});
 
 $(document).on("click",".appicon",newDataFrame);
 
 
 socket.on("roomspdate",function(rooms){
-$(".sidebar-nav li.dynamic").remove();
+	$(".sidebar-nav li.dynamic").remove();
 	$(rooms).each(function(){
 		$(".sidebar-nav").append($("<li>",{class:"dynamic"}).append(
 			$("<a>",{
@@ -84,7 +100,7 @@ $(".sidebar-nav li.dynamic").remove();
 
 
 $("#newChannelButton").click(function(){
-	name = $("#newChannelInput").val();
+	var name = $("#newChannelInput").val();
 	if(name.length>0)
 	{
 		newDataFrame("chatRoomLink",name);
@@ -98,7 +114,8 @@ function initchatRoomLink(divFrame, idChat)
 {
 	socket.emit("connectchat",{idChat:idChat,sender:$("#nameInput").val()});
 
-	divFrame.append($("<div></div>",{class:"chatWindow"}));
+	divFrame.append($("<div></div>",{class:"chatWindow"}).append($("<div></div>",{class:"content"})));
+
 	divFrame.append($('<input>', {
 		value: idChat,
 		class:"idChat",			
@@ -116,7 +133,9 @@ function initchatRoomLink(divFrame, idChat)
 		class:"sendChat"
 	}).on('keyup',keypresstextarea));
 
-	chatWindow=divFrame.find(".chatWindow");
+	var chatWindow=divFrame.find(".chatWindow");
+	var content = chatWindow.find(".content");
+	chatWindow.animate({ scrollTop: 999999999999}, 10);
 
 	socket.on(idChat,function(message)
 	{
@@ -124,18 +143,20 @@ function initchatRoomLink(divFrame, idChat)
 			refresChatRoom(this,chatWindow);
 		});
 	});
-	chatWindow.animate({ scrollTop: 9999999999999}, 1000);
-
 }
 
 function refresChatRoom(message,chatWindow)
 {
-	console.log(message);
-	chatWindow.append($("<div/>",{
+	var content = chatWindow.find(".content").append($("<div/>",{
 		html:'<label><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> '+message.sender+': </label> '+message.message.replace("\n","<br>"),
 		class:"alert",
 		style:"background-color:#"+intToRGB(hashCode(message.sender))
 	}));
+
+	if((chatWindow.scrollTop() / (content.height() - chatWindow.height()))>.85)
+	{
+		chatWindow.animate({ scrollTop: content.height()}, 1000);
+	}
 }
 var keypresstextarea =    function(e){
 	if (e.keyCode == 13) {
@@ -143,9 +164,7 @@ var keypresstextarea =    function(e){
                 var divFrame =  $(this).closest(".divFrame");
                 var idChat=divFrame.find(".idChat").val();
                 var textarea = $(this);
-                chatWindow=divFrame.find(".chatWindow");
-
-                chatWindow2=divFrame.find(".chatWindow");
+                var chatWindow=divFrame.find(".chatWindow");
 
 
                 if (textarea.val().trim().length>0) {
