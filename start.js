@@ -78,25 +78,11 @@ postmessage = function(message){
 
 function checkPortAndLaunch(checkPort,adresse,typeServeur,serveur, callback)
 {
-	portscanner.checkPortStatus(checkPort, adresse, function(error, status) {
-		if (status==='open') {
-			portscanner.findAPortNotInUse(8000, 9000, adresse, function(error, port) {
-				
-				// console.log("Le port "+checkPort +" est déja en cours d'utilisation ! ");
-				checkPort=port;
-				serveur.listen(checkPort,adresse);
+			portscanner.findAPortNotInUse(checkPort, checkPort+1000, adresse, function(error, port) {
+				serveur.listen(port,adresse);
 				console.log("Serveur "+typeServeur+" asigné au port " +checkPort);
 				if(callback) callback();
 			})
-		}
-		else
-		{
-			serveur.listen(checkPort,adresse);
-			console.log("Serveur "+typeServeur+" asigné au port " +checkPort);
-			if(callback) callback();
-		}
-
-	})
 }
 var phttp=8080;
 var phttps=8081;
