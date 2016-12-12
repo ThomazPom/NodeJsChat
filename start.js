@@ -4,6 +4,9 @@ app.use(express.static('public'));
 var fs = require('fs');
 var ostype = require('os').type();
 var fs = require('fs');
+const testFolder = './tests/';
+const	publicFolder= "./public/";
+const pathlib = require('path');
 
 fs.access('tmp', fs.F_OK, function (err) {
 	if(err)
@@ -121,7 +124,40 @@ io.on('connection', function(socket){
 		}
 	});
 
+	socket.on("explorefile",function(path)
+	{
 
+		if(fs.existsSync(publicFolder+"/"+path))
+		{
+			fs.readdir(publicFolder+"/"+path, (err, files) => {
+				fileObject = [];
+				parent = path.split("/");
+				parent.pop();
+				console.log(parent.join("/"));
+				fileObject.push({
+					path:parent.join("/"),
+					file:"..",type:false})
+				files.forEach(file => {
+					filepath = path+"/"+file;
+					fileObject.push({
+						path:filepath,
+						file:file,type:fs.statSync(publicFolder+"/"+filepath).isFile()})
+				});
+
+				resultObject = {path:path}
+				resultObject["files"]= fileObject;
+				socket.emit("fileandFolderList",resultObject);
+
+				console.log(fileObject)
+			});
+		}
+		else
+		{
+			console.log(publicFolder+"/"+path +" do not exist")
+		}
+	});
+
+	
 });
 
 

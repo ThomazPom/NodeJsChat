@@ -71,9 +71,45 @@ newDataFrame = function(type=null,data=null)
 		divFrame = divContent.find(".divFrame")
 		initchatRoomLink(divFrame,data||$(this).attr("data"));
 	}	
-
+	if (type=="exploreFileLink"||$(this).hasClass("exploreFileLink")) 
+	{
+		divContent.css("width",70-tailleAdapter/2+"vw").css("height",80-tailleAdapter+"vh");
+		divFrame = divContent.find(".divFrame")
+		initExplorer(divFrame);
+	}
 	idDivContent++;
 }
+
+function initExplorer(divFrame)
+{
+	var table = $("<table>",{class:"tableexplorer table"});
+	divFrame.append(table);
+	socket.emit("explorefile","upload");
+}
+socket.on("fileandFolderList",function(list){
+	table = $("table.tableexplorer").empty();
+	console.log(list.path);
+	table.prepend($("<tr>").prepend($("<td>").prepend($("<h1>",{html:list.path}))));
+	$(list.files).each(function(){
+		table.append(
+			$("<tr>").prepend(
+				$("<td>").prepend(
+					$("<h4>").prepend(
+						$("<a>",{html:"&nbsp;&nbsp;"+this.file,class:this.type?"file":"folder"}).attr("data",this.path).attr("href",this.path).attr("target","blank")
+						).prepend(
+							$('<span>',{class:this.type?"glyphicon glyphicon-save-file":"glyphicon glyphicon-folder-open"})
+							
+						)
+					)
+				)
+			);
+	});
+})
+$(document).on("click",".folder",function(e)
+{
+	e.preventDefault();
+	socket.emit("explorefile",$(this).attr("data"));
+});
 
 $(document).on("click",".closeDivContent",function()
 {
