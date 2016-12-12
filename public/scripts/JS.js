@@ -22,10 +22,13 @@ var percentMeter = divWaiter.children(".meter").children("h3").children("text");
 divWaiter.draggable();
 
 var socket = io();
+socket.on(socket.id,function(message)
+{
+	newDataFrame("chatRoomLink",socket.id);
+});
 
 
 //-/Initialisation terminée
-
 //Pour ramener une fenêtre au premierPlan
 
 function divContentTopIndex(sender)
@@ -49,6 +52,8 @@ newDataFrame = function(type=null,data=null)
 	if(divContent.length>0)
 	{
 		divContentTopIndex(divContent[0]);
+		var chatWindow=divFrame.find(".chatWindow");
+		refresChatRoom(chatWindow);
 		return;
 	}
 	
@@ -73,6 +78,8 @@ newDataFrame = function(type=null,data=null)
 $(document).on("click",".closeDivContent",function()
 {
 	var divContent = $(this).closest('.divContent');
+
+	socket.emit("quitchat",{idChat:divContent.attr("data"),sender:$("#nameInput").val()});
 	socket.removeListener(divContent.find(".idChat").val());
 	divContent.remove();
 });
@@ -80,14 +87,25 @@ $(document).on("click",".closeDivContent",function()
 $(document).on("click",".appicon",newDataFrame);
 
 
+function systemMessage(divFrame,message)
+{
+	var baniere = 	$('<p>',{
+		style:"position: absolute; background: black; text-align: center;top: 0px;width: 100%;z-index: 100;color: white;",
+		text:message
+	})
+	divFrame.append(baniere);
+	baniere.animate({height:0},4000,"swing",function(){$(this).remove()});
+
+}
 socket.on("roomspdate",function(rooms){
-	$(".sidebar-nav li.dynamic").remove();
+	$("#chatroombar li.dynamic").remove();
 	$(rooms).each(function(){
-		$(".sidebar-nav").append($("<li>",{class:"dynamic"}).append(
+		$("#chatroombar").append($("<li>",{class:"dynamic"}).append(
 			$("<a>",{
 					//	<a class="appicon chatRoomLink" data="audiomaniacs"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Audio Maniacs</a>
 					class:"appicon chatRoomLink",
 					html:" "+this
+
 
 				}).attr("data",this).prepend($("<span>",{
 					style:"color:cyan",
@@ -95,6 +113,30 @@ socket.on("roomspdate",function(rooms){
 				})))
 		)
 	});
+
+});
+
+socket.on("usersupdate",function(users){
+	$("#userbar li.user").remove();
+
+	var keys =Object.keys(users);
+	for (var i = keys.length - 1; i >= 0; i--) {
+
+		if(socket.id != keys[i])
+		{
+			$("#userbar").append($("<li>",{class:"user"}).append(
+				$("<a>",{
+					//	<a class="appicon chatRoomLink" data="audiomaniacs"><span style="color:cyan" class="glyphicon glyphicon-comment" aria-hidden="true"></span> Audio Maniacs</a>
+					class:"appicon chatRoomLink",
+					html:" "+users[keys[i]].name
+
+				}).attr("data",keys[i]).prepend($("<span>",{
+					style:"color:green",
+					class:"glyphicon glyphicon-copyright-mark",
+				})))
+			)
+		}
+	}
 
 });
 
@@ -107,6 +149,10 @@ $("#newChannelButton").click(function(){
 	}
 });
 
+$("#nameInput").change(function(){
+
+	socket.emit("nickname",$(this).val());
+})
 
 
 
@@ -139,9 +185,15 @@ function initchatRoomLink(divFrame, idChat)
 
 	socket.on(idChat,function(message)
 	{
-		$(message).each(function(){
-			refresChatRoom(this,chatWindow);
-		});
+		if (message.sender=="System") {
+			systemMessage(divFrame,message.message);
+		}
+		else
+		{
+			$(message).each(function(){
+				refresChatRoom(this,chatWindow);
+			});
+		}
 	});
 }
 
