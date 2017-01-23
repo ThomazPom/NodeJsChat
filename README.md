@@ -5,6 +5,7 @@ A very cool Node JS multi user chat with channels
 #Usage :
 
 Tested with nodeJS 6:
--node start.js
+npm install
+npm start
 
 localhost:8080
