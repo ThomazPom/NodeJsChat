@@ -179,6 +179,7 @@ socket.on("usersupdate",function(users){
 
 $("#newChannelButton").click(function(){
 	var name = $("#newChannelInput").val();
+	$("#newChannelInput").val("");
 	if(name.length>0)
 	{
 		newDataFrame("chatRoomLink",name);
